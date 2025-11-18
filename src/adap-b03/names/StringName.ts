@@ -7,65 +7,63 @@ export class StringName extends AbstractName {
     protected name: string = "";
     protected noComponents: number = 0;
 
-    constructor(source: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+    constructor(source: string, delimiter: string = DEFAULT_DELIMITER) {
+        super(delimiter);
+        this.name = source;
+        this.noComponents =
+            source.length === 0 ? 0 : source.split(this.delimiter).length;
     }
 
     public clone(): Name {
-        throw new Error("needs implementation or deletion");
+        return new StringName(this.name, this.delimiter);
     }
 
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+    // Helpers to work with the string representation
+
+    protected explode(): string[] {
+        if (this.name.length === 0) {
+            return [];
+        }
+        return this.name.split(this.delimiter);
     }
 
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
+    protected implode(parts: string[]): void {
+        this.name = parts.join(this.delimiter);
+        this.noComponents = parts.length;
     }
 
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
+    // Primitive methods required by AbstractName
+
+    protected doGetNoComponents(): number {
+        return this.noComponents;
     }
 
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
+    protected doGetComponent(i: number): string {
+        const parts = this.explode();
+        return parts[i];
     }
 
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+    protected doSetComponent(i: number, c: string): void {
+        const parts = this.explode();
+        parts[i] = c;
+        this.implode(parts);
     }
 
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+    protected doInsert(i: number, c: string): void {
+        const parts = this.explode();
+        parts.splice(i, 0, c);
+        this.implode(parts);
     }
 
-    public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+    protected doAppend(c: string): void {
+        const parts = this.explode();
+        parts.push(c);
+        this.implode(parts);
     }
 
-    public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+    protected doRemove(i: number): void {
+        const parts = this.explode();
+        parts.splice(i, 1);
+        this.implode(parts);
     }
-
-    public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public append(c: string) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
-
 }
