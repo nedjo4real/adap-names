@@ -8,6 +8,10 @@ export class Directory extends Node {
         super(bn, pn);
     }
 
+    public getChildren(): Node[] {
+        return Array.from(this.childNodes);
+    }
+
     public hasChildNode(cn: Node): boolean {
         return this.childNodes.has(cn);
     }

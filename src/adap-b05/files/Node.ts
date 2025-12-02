@@ -1,6 +1,3 @@
-import { IllegalArgumentException } from "../common/IllegalArgumentException";
-import { InvalidStateException } from "../common/InvalidStateException";
-
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
 
@@ -52,12 +49,32 @@ export class Node {
         return this.parentNode;
     }
 
+    public getChildren(): Node[] {
+        return [];
+    }
+
     /**
      * Returns all nodes in the tree that match bn
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        const result = new Set<Node>();
+
+        // 1. check this node
+        if (this.getBaseName() === bn) {
+            result.add(this);
+        }
+
+        // 2. recursively search all children
+        const children = this.getChildren();
+        for (const child of children) {
+            const matches = child.findNodes(bn);
+            for (const m of matches) {
+                result.add(m);
+            }
+        }
+
+        return result;
     }
 
 }
